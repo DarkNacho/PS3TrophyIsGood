@@ -106,6 +106,15 @@ namespace PS3TrophyIsGood.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Some trophies will have date/time greater than the current. Are you sure?.
+        /// </summary>
+        internal static string CopyHasDateGreaterThanCurrent {
+            get {
+                return ResourceManager.GetString("CopyHasDateGreaterThanCurrent", resourceCulture);
+            }
+        }
+		
+		/// <summary>
         ///   查詢類似 Danger 的當地語系化字串。
         /// </summary>
         internal static string Danger {

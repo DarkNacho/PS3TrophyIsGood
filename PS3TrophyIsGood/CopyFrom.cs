@@ -31,11 +31,23 @@ namespace PS3TrophyIsGood
             groupBox1.Visible = false;
         }
 
+        private IEnumerable<long> _times;
+
+        public List<long> Times
+        {
+            get
+            {
+                if (_times == null)
+                    return new List<long>();
+                return _times.ToList();
+            }
+        }
+
         /// <summary>
         /// This get the timestamp from a profile(asuming is a legit one) then modify them to looks like they are legit but not a comple copy
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<long> smartCopy()
+        private IEnumerable<long> smartCopy()
         {
             var trophies = copyFrom(textBox1.Text).ToList();
             trophies.Sort((a, b) => a.Date.CompareTo(b.Date));
@@ -53,7 +65,7 @@ namespace PS3TrophyIsGood
             return trophies.Select(d=>d.Date);
         }
 
-        public IEnumerable<long> copyFrom() => copyFrom(textBox1.Text).Select(p => p.Date);
+        private IEnumerable<long> copyFrom() => copyFrom(textBox1.Text).Select(p => p.Date);
 
         /// <summary>
         /// Just parse and get the timestamps from a profile from https://psntrophyleaders.com
@@ -93,7 +105,11 @@ namespace PS3TrophyIsGood
             if (minMinutes.Value > maxMinutes.Value)
                 MessageBox.Show(Properties.strings.MinCantBeGreaterThanMax);
             else if (Regex.IsMatch(textBox1.Text,"https://psntrophyleaders.com/user/view/" + "\\S+/\\S+"))
-                DialogResult = DialogResult.OK;
+            {
+                _times = checkBox1.Checked ? smartCopy() : copyFrom();
+                if (!_times.Any(t => DateTime.Compare(t.TimeStampToDateTime(), DateTime.Now) > 0) || (MessageBox.Show(Properties.strings.CopyHasDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                    DialogResult = DialogResult.OK;
+            }
             else MessageBox.Show(Properties.strings.CantFindGame);
         }
     }

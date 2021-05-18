@@ -177,4 +177,7 @@
   <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
     <value>所選日期/時間長於當前日期/時間。 你想繼續嗎？</value>
   </data>
+  <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
+    <value>某些獎杯的日期/時間將大於當前日期/時間。 你確定嗎？</value>
+  </data>
 </root>

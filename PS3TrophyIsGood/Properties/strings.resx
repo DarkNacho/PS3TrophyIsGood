@@ -177,4 +177,7 @@
   <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
     <value>Selected date/time is greater than the current. Are you sure?</value>
   </data>
+  <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
+    <value>Some trophies will have date/time greater than the current. Are you sure?</value>
+  </data>
 </root>

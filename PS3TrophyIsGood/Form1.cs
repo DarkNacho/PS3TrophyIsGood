@@ -610,7 +610,7 @@ namespace PS3TrophyIsGood
         {
             if (copyFrom.ShowDialog(this) == DialogResult.OK)
             {
-                var _times = copyFrom.checkBox1.Checked ? copyFrom.smartCopy().ToList() : copyFrom.copyFrom().ToList();
+                var _times = copyFrom.Times;
                 if (_times.Any()) 清除獎杯ToolStripMenuItem_Click(sender, e); // no idea why but sometimes it get bug and it don't update, so lockin first fix it
                 try
                 {
