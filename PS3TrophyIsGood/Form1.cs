@@ -614,10 +614,9 @@ namespace PS3TrophyIsGood
                 if (_times.Any()) 清除獎杯ToolStripMenuItem_Click(sender, e); // no idea why but sometimes it get bug and it don't update, so lockin first fix it
                 try
                 {
-                    for (int i = 0; i < tusr.trophyTimeInfoTable.Count; ++i)
+                    for (int i = 0; i < tconf.Count; i++)
                     {
-
-                        if (!tpsn[i].HasValue && _times[i] != 0)
+                        if (!IsTrophySync(i) && _times[i] != 0)
                         {
                             var time = _times[i].TimeStampToDateTime();
                             tusr.UnlockTrophy(i, time);
