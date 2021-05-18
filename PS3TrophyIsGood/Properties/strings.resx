@@ -166,12 +166,15 @@
     <value>"Minimum minutes" can't be greater than "Maximum minutes".</value>
   </data>
   <data name="PsnSyncTime" xml:space="preserve">
-    <value>The last trophy synchronized with PSN has the following date: {0}. Select a date greater than this.</value>
+    <value>The last trophy synchronized with PSN has the following date: {0}. Select a date/time greater than this.</value>
   </data>
   <data name="DateFormatString" xml:space="preserve">
     <value>yyyy/M/dd  HH:mm:ss</value>
   </data>
   <data name="FileNotFoundMsg" xml:space="preserve">
     <value>"{0}" was not found. Please, select a valid trophy folder.</value>
+  </data>
+  <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
+    <value>Selected date/time is greater than the current. Are you sure?</value>
   </data>
 </root>

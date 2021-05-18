@@ -214,6 +214,15 @@ namespace PS3TrophyIsGood.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Selected date/time is greater than the current. Are you sure?.
+        /// </summary>
+        internal static string SelectedDateGreaterThanCurrent {
+            get {
+                return ResourceManager.GetString("SelectedDateGreaterThanCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 To avoid the PSN identified,only not been synchronized trophy can be edited. 的當地語系化字串。
         /// </summary>
         internal static string SyncedTrophyCanNotEdit {

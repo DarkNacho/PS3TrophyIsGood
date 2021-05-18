@@ -174,4 +174,7 @@
   <data name="FileNotFoundMsg" xml:space="preserve">
     <value>找不到“ {0}”。 請選擇一個有效的獎杯文件夾。</value>
   </data>
+  <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
+    <value>所選日期/時間長於當前日期/時間。 你想繼續嗎？</value>
+  </data>
 </root>

@@ -91,7 +91,7 @@ namespace PS3TrophyIsGood
                 MessageBox.Show(string.Format(Properties.strings.PsnSyncTime, lastSyncTrophyTime.ToString(Properties.strings.DateFormatString)));
                 return false;
             }
-            return true;
+            return ((DateTime.Compare(selectedDate, DateTime.Now) <= 0) || (MessageBox.Show(Properties.strings.SelectedDateGreaterThanCurrent, Properties.strings.Close, MessageBoxButtons.YesNo) == DialogResult.Yes));
         }
 
         private void DeleteTrophy(int trophyId, ListViewItem lvi)
@@ -125,32 +125,27 @@ namespace PS3TrophyIsGood
                 MessageBox.Show(Properties.strings.CantUnloclPlatinumBeforOther);
                 return false;
             }
-            else
+
+            if (ValidateSelectedDate(trophyTime))
             {
-                if (ValidateSelectedDate(trophyTime))
+                try
                 {
-                    try
-                    {
-                        tpsn.PutTrophy(trophyId, tusr.trophyTypeTable[trophyId].Type, trophyTime);
-                        tusr.UnlockTrophy(trophyId, trophyTime);
-                        lvi.SubItems[4].Text = Properties.strings.yes;
-                        lvi.BackColor = Color.White;
-                        lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
-                        CompletionRates();
-                        haveBeenEdited = true;
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                        return false;
-                    }
+                    tpsn.PutTrophy(trophyId, tusr.trophyTypeTable[trophyId].Type, trophyTime);
+                    tusr.UnlockTrophy(trophyId, trophyTime);
+                    lvi.SubItems[4].Text = Properties.strings.yes;
+                    lvi.BackColor = Color.White;
+                    lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
+                    CompletionRates();
+                    haveBeenEdited = true;
+                    return true;
                 }
-                else
+                catch (Exception ex)
                 {
+                    MessageBox.Show(ex.Message);
                     return false;
                 }
             }
+            return false;
         }
 
         private bool ChangeTrophyTime(int trophyId, DateTime trophyTime, ListViewItem lvi)
