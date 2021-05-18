@@ -91,7 +91,7 @@ namespace PS3TrophyIsGood
                 MessageBox.Show(string.Format(Properties.strings.PsnSyncTime, lastSyncTrophyTime.ToString(Properties.strings.DateFormatString)));
                 return false;
             }
-            return ((DateTime.Compare(selectedDate, DateTime.Now) <= 0) || (MessageBox.Show(Properties.strings.SelectedDateGreaterThanCurrent, Properties.strings.Close, MessageBoxButtons.YesNo) == DialogResult.Yes));
+            return ((DateTime.Compare(selectedDate, DateTime.Now) <= 0) || (MessageBox.Show(Properties.strings.SelectedDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes));
         }
 
         private void DeleteTrophy(int trophyId, ListViewItem lvi)
