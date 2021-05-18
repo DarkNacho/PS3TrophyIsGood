@@ -569,11 +569,13 @@ namespace PS3TrophyIsGood
 
         private void 清除獎杯ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TROPTRNS.TrophyInfo? ti = tpsn.PopTrophy();
-            while (ti.HasValue)
+            for (int i = 0; i < tconf.Count; i++)
             {
-                tusr.LockTrophy(ti.Value.TrophyID);
-                ti = tpsn.PopTrophy();
+                if (!IsTrophySync(i))
+                {
+                    tpsn.DeleteTrophyByID(i);
+                    tusr.LockTrophy(i);
+                }
             }
             haveBeenEdited = true;
             RefreshComponents();
