@@ -175,9 +175,12 @@
     <value>"{0}" was not found. Please, select a valid trophy folder.</value>
   </data>
   <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
-    <value>Selected date/time is greater than the current. Are you sure?</value>
+    <value>Selected date/time is greater than the current date/time. Continue?</value>
   </data>
   <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
-    <value>Some trophies will have date/time greater than the current. Are you sure?</value>
+    <value>Some trophies will have date/time greater than the current date/time. Continue?</value>
+  </data>
+  <data name="CopyHasDateLowerThanLastSync" xml:space="preserve">
+    <value>Some trophies will have date/time lower than the last synchronized trophy. Continue?</value>
   </data>
 </root>

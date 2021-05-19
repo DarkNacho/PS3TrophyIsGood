@@ -25,14 +25,16 @@ namespace PS3TrophyIsGood
             }
         }
 
-        public CopyFrom()
+        private DateTime lastSyncTrophyTime;
+
+        public CopyFrom(DateTime lastSyncTrophyTime)
         {
             InitializeComponent();
+            this.lastSyncTrophyTime = lastSyncTrophyTime;
             groupBox1.Visible = false;
         }
 
         private IEnumerable<long> _times;
-
         public List<long> Times
         {
             get
@@ -107,7 +109,26 @@ namespace PS3TrophyIsGood
             else if (Regex.IsMatch(textBox1.Text,"https://psntrophyleaders.com/user/view/" + "\\S+/\\S+"))
             {
                 _times = checkBox1.Checked ? smartCopy() : copyFrom();
-                if (!_times.Any(t => DateTime.Compare(t.TimeStampToDateTime(), DateTime.Now) > 0) || (MessageBox.Show(Properties.strings.CopyHasDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                var hasDateGreaterThanCurrent = _times.Any(t => DateTime.Compare(t.TimeStampToDateTime(), DateTime.Now) > 0);
+                var hasDateLowerThanLastSync = _times.Any(t => DateTime.Compare(lastSyncTrophyTime, t.TimeStampToDateTime()) > 0);
+
+                if (hasDateGreaterThanCurrent && hasDateLowerThanLastSync)
+                {
+                    if ((MessageBox.Show(Properties.strings.CopyHasDateLowerThanLastSync, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        && (MessageBox.Show(Properties.strings.CopyHasDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                        DialogResult = DialogResult.OK;
+                }
+                else if (hasDateGreaterThanCurrent)
+                {
+                    if (MessageBox.Show(Properties.strings.CopyHasDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        DialogResult = DialogResult.OK;
+                }
+                else if (hasDateLowerThanLastSync)
+                {
+                    if (MessageBox.Show(Properties.strings.CopyHasDateLowerThanLastSync, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        DialogResult = DialogResult.OK;
+                }
+                else
                     DialogResult = DialogResult.OK;
             }
             else MessageBox.Show(Properties.strings.CantFindGame);

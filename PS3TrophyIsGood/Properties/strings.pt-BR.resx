@@ -180,4 +180,7 @@
   <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
     <value>Alguns troféus ficarão com a data/hora maior que a atual. Deseja continuar?</value>
   </data>
+  <data name="CopyHasDateLowerThanLastSync" xml:space="preserve">
+    <value>Alguns troféus ficarão com a data/hora menor que a data/hora do último troféu sincronizado. Deseja continuar?</value>
+  </data>
 </root>

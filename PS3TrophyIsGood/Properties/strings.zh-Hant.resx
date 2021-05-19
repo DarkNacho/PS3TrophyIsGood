@@ -180,4 +180,7 @@
   <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
     <value>某些獎杯的日期/時間將大於當前日期/時間。 你確定嗎？</value>
   </data>
+  <data name="CopyHasDateLowerThanLastSync" xml:space="preserve">
+    <value>某些獎杯的日期/時間會比上次同步獎杯的日期/時間低。 繼續？</value>
+  </data>
 </root>

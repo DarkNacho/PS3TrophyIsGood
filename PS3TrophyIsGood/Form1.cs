@@ -61,7 +61,6 @@ namespace PS3TrophyIsGood
             toolStripComboBox2.Items.AddRange(profiles);
             toolStripComboBox2.SelectedIndex = 0;
             dateTimePicker1.CustomFormat = Properties.strings.DateFormatString;
-            copyFrom = new CopyFrom();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -439,6 +438,7 @@ namespace PS3TrophyIsGood
                 ps3Time = lastSyncTrophyTime;
                 dtpForm = new DateTimePickForm(ps3Time);
                 dtpfForInstant = new DateTimePickForm(ps3Time);
+                copyFrom = new CopyFrom(ps3Time);
 
                 RefreshComponents();
                 isOpen = true;
