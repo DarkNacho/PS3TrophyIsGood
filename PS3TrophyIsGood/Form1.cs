@@ -147,7 +147,7 @@ namespace PS3TrophyIsGood
             return false;
         }
 
-        private bool ChangeTrophyTime(int trophyId, DateTime trophyTime, ListViewItem lvi)
+        private bool ChangeTrophyTime(int trophyId, DateTime trophyTime)
         {
             if (IsTrophySync(trophyId))
             {
@@ -164,7 +164,6 @@ namespace PS3TrophyIsGood
                         TROPUSR.TrophyTimeInfo tti = tusr.trophyTimeInfoTable[trophyId];
                         tti.Time = trophyTime;
                         tusr.trophyTimeInfoTable[trophyId] = tti;
-                        lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
                         haveBeenEdited = true;
                         return true;
                     }
@@ -179,6 +178,14 @@ namespace PS3TrophyIsGood
                     return false;
                 }
             }
+        }
+
+        private bool ChangeTrophyTime(int trophyId, DateTime trophyTime, ListViewItem lvi)
+        {
+            var ret = ChangeTrophyTime(trophyId, trophyTime);
+            if (ret)
+                lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
+            return ret;
         }
 
         private void RefreshComponents()
