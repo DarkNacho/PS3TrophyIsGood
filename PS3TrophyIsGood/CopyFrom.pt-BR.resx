@@ -130,8 +130,8 @@
   <data name="checkBox1.Text" xml:space="preserve">
     <value>Aplicar cópia inteligente</value>
   </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Opções</value>
+  <data name="lblHours.Text" xml:space="preserve">
+    <value>Horas</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>91, 13</value>
@@ -141,6 +141,9 @@
   </data>
   <data name="label4.Text" xml:space="preserve">
     <value>Minutos (mínimo):</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>147, 19</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>31, 13</value>
@@ -159,6 +162,9 @@
   </data>
   <data name="label1.Text" xml:space="preserve">
     <value>Dias</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Opções</value>
   </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>80, 13</value>

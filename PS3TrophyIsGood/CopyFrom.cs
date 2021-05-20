@@ -53,16 +53,21 @@ namespace PS3TrophyIsGood
         {
             var trophies = copyFrom(textBox1.Text).ToList();
             trophies.Sort((a, b) => a.Date.CompareTo(b.Date));
-            var rand = new Random(); 
-            var time = TimeSpan.FromDays((long)(yearsNumeric.Value * 365+ monthNumeric.Value * 30 + daysNumeric.Value)) + TimeSpan.FromSeconds(rand.Next((int)minMinutes.Value, (int)maxMinutes.Value));
-            var delta = Convert.ToInt64(time.TotalSeconds);
-            for (int i = 0; i< trophies.Count-1; ++i)
+            var rand = new Random();
+            DateTime dtTrophy = new DateTime();
+            for (int i = 0; i < trophies.Count; i++)
             {
                 if (trophies[i].Date == 0) continue;
-                trophies[i].Date += delta;
-                if (trophies[i +1].Date - trophies[i].Date > 60) delta += rand.Next((int)minMinutes.Value, (int)maxMinutes.Value);
+                DateTime dtAux = trophies[i].Date.TimeStampToDateTime();
+                dtAux = dtAux.AddYears((int)yearsNumeric.Value).AddMonths((int)monthNumeric.Value).AddHours((int)hoursNumeric.Value).AddDays((double)daysNumeric.Value);
+                do
+                {
+                    dtAux = dtAux.AddSeconds(rand.Next((int)minMinutes.Value * 60, (int)maxMinutes.Value * 60));
+                } while (DateTime.Compare(dtTrophy, dtAux) > 0);
+                dtTrophy = dtAux;
+                trophies[i].Date = dtTrophy.DateTimeToTimeStamp();
             }
-            trophies[trophies.Count -1].Date += delta;
+
             trophies.Sort((a, b) => a.Id.CompareTo(b.Id));
             return trophies.Select(d=>d.Date);
         }

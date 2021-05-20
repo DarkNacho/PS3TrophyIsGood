@@ -34,6 +34,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblHours = new System.Windows.Forms.Label();
+            this.hoursNumeric = new System.Windows.Forms.NumericUpDown();
             this.maxMinutes = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.minMinutes = new System.Windows.Forms.NumericUpDown();
@@ -46,6 +48,7 @@
             this.daysNumeric = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hoursNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yearsNumeric)).BeginInit();
@@ -82,6 +85,8 @@
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.lblHours);
+            this.groupBox1.Controls.Add(this.hoursNumeric);
             this.groupBox1.Controls.Add(this.maxMinutes);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.minMinutes);
@@ -94,6 +99,26 @@
             this.groupBox1.Controls.Add(this.daysNumeric);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // lblHours
+            // 
+            resources.ApplyResources(this.lblHours, "lblHours");
+            this.lblHours.Name = "lblHours";
+            // 
+            // hoursNumeric
+            // 
+            resources.ApplyResources(this.hoursNumeric, "hoursNumeric");
+            this.hoursNumeric.Maximum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            0});
+            this.hoursNumeric.Minimum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            -2147483648});
+            this.hoursNumeric.Name = "hoursNumeric";
             // 
             // maxMinutes
             // 
@@ -143,6 +168,11 @@
             // yearsNumeric
             // 
             resources.ApplyResources(this.yearsNumeric, "yearsNumeric");
+            this.yearsNumeric.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.yearsNumeric.Name = "yearsNumeric";
             // 
             // monthNumeric
@@ -153,6 +183,11 @@
             0,
             0,
             0});
+            this.monthNumeric.Minimum = new decimal(new int[] {
+            11,
+            0,
+            0,
+            -2147483648});
             this.monthNumeric.Name = "monthNumeric";
             // 
             // daysNumeric
@@ -163,6 +198,11 @@
             0,
             0,
             0});
+            this.daysNumeric.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            -2147483648});
             this.daysNumeric.Name = "daysNumeric";
             // 
             // label6
@@ -187,6 +227,7 @@
             this.Name = "CopyFrom";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hoursNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yearsNumeric)).EndInit();
@@ -215,5 +256,7 @@
         private System.Windows.Forms.NumericUpDown monthNumeric;
         private System.Windows.Forms.NumericUpDown daysNumeric;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblHours;
+        private System.Windows.Forms.NumericUpDown hoursNumeric;
     }
 }
