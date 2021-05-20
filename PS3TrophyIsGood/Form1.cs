@@ -305,7 +305,7 @@ namespace PS3TrophyIsGood
 
         private DateTime GetDateTimeLastBaseTrophyAchieved()
         {
-            DateTime date = new DateTime();
+            DateTime date = ps3Time;
             for (int i = 1; i < tconf.trophys.Count; i++)
             {
                 if (tconf[i].gid == 0 && IsTrophyAchieved(i))
@@ -433,15 +433,6 @@ namespace PS3TrophyIsGood
         private void 關閉檔案CToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CloseFile();
-        }
-
-        private DateTime LastTrophyTime()
-        {
-            if (DateTime.Compare(tpsn.LastTrophyTime, tusr.LastTrophyTime) > 0)
-            {
-                return tpsn.LastTrophyTime;
-            }
-            return tusr.LastTrophyTime;
         }
 
         private void OpenFile(string path_in)
@@ -578,8 +569,9 @@ namespace PS3TrophyIsGood
             //Platinium game
             if (!IsTrophyAchieved(0))
             {
-                tusr.UnlockTrophy(0, LastTrophyTime().AddSeconds(1));
-                tpsn.PutTrophy(0, tusr.trophyTypeTable[0].Type, LastTrophyTime().AddSeconds(1));
+                DateTime aux = GetDateTimeLastBaseTrophyAchieved();
+                tusr.UnlockTrophy(0, aux.AddSeconds(1));
+                tpsn.PutTrophy(0, tusr.trophyTypeTable[0].Type, aux.AddSeconds(1));
             }
 
             //DLC 
