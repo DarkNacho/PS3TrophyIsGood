@@ -296,6 +296,27 @@ namespace PS3TrophyIsGood
             return tpsn[trophyID].HasValue || tusr.trophyTimeInfoTable[trophyID].IsGet;
         }
 
+        private DateTime GetTrophyTime(int trophyID)
+        {
+            if (tpsn[trophyID].HasValue)
+                return tpsn[trophyID].Value.Time;
+            return tusr.trophyTimeInfoTable[trophyID].Time;
+        }
+
+        private DateTime GetDateTimeLastBaseTrophyAchieved()
+        {
+            DateTime date = new DateTime();
+            for (int i = 1; i < tconf.trophys.Count; i++)
+            {
+                if (tconf[i].gid == 0 && IsTrophyAchieved(i))
+                {
+                    var trophyTime = GetTrophyTime(i);
+                    date = (DateTime.Compare(trophyTime, date) > 0 ? trophyTime : date);
+                }
+            }
+            return date;
+        }
+
         private int GetCountBaseTrophiesAchieved()
         {
             int countBaseTrophiesGot = 0;
@@ -630,6 +651,10 @@ namespace PS3TrophyIsGood
                             tpsn.PutTrophy(i, tusr.trophyTypeTable[i].Type, time);
                         }
                     }
+
+                    if (copyFrom.checkBox1.Checked && tconf.HasPlatinium && (GetCountBaseTrophiesAchieved() >= baseGamaCount) && !IsTrophySync(0))
+                        ChangeTrophyTime(0, GetDateTimeLastBaseTrophyAchieved().AddSeconds(1));
+
                     haveBeenEdited = true;
                     RefreshComponents();
                 }

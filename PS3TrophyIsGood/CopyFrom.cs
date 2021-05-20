@@ -62,7 +62,9 @@ namespace PS3TrophyIsGood
                 dtAux = dtAux.AddYears((int)yearsNumeric.Value).AddMonths((int)monthNumeric.Value).AddHours((int)hoursNumeric.Value).AddDays((double)daysNumeric.Value);
                 do
                 {
-                    dtAux = dtAux.AddSeconds(rand.Next((int)minMinutes.Value * 60, (int)maxMinutes.Value * 60));
+                    DateTime dtAux2 = dtAux.AddSeconds(rand.Next((int)minMinutes.Value * 60, (int)maxMinutes.Value * 60));
+                    if (DateTime.Compare(dtAux2, dtTrophy) >= 0)
+                        dtAux = dtAux2;
                 } while (DateTime.Compare(dtTrophy, dtAux) > 0);
                 dtTrophy = dtAux;
                 trophies[i].Date = dtTrophy.DateTimeToTimeStamp();
@@ -72,7 +74,19 @@ namespace PS3TrophyIsGood
             return trophies.Select(d=>d.Date);
         }
 
-        private IEnumerable<long> copyFrom() => copyFrom(textBox1.Text).Select(p => p.Date);
+        private IEnumerable<long> copyFrom()
+        {
+            var trophies = copyFrom(textBox1.Text).ToList();
+            if (hoursNumeric.Value != 0) {
+                for (int i = 0; i < trophies.Count; i++)
+                {
+                    if (trophies[i].Date == 0) continue;
+                    DateTime dtAux = trophies[i].Date.TimeStampToDateTime().AddHours((int)hoursNumeric.Value);
+                    trophies[i].Date = dtAux.DateTimeToTimeStamp();
+                }
+            }
+            return trophies.Select(d => d.Date);
+        }
 
         /// <summary>
         /// Just parse and get the timestamps from a profile from https://psntrophyleaders.com
