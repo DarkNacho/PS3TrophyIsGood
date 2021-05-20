@@ -115,7 +115,7 @@ namespace PS3TrophyIsGood
             {
                 _times = checkBox1.Checked ? smartCopy() : copyFrom();
                 var hasDateGreaterThanCurrent = _times.Any(t => DateTime.Compare(t.TimeStampToDateTime(), DateTime.Now) > 0);
-                var hasDateLowerThanLastSync = _times.Any(t => DateTime.Compare(lastSyncTrophyTime, t.TimeStampToDateTime()) > 0);
+                var hasDateLowerThanLastSync = _times.Any(t => t > 0 && DateTime.Compare(lastSyncTrophyTime, t.TimeStampToDateTime()) > 0);
 
                 if (hasDateGreaterThanCurrent && hasDateLowerThanLastSync)
                 {
