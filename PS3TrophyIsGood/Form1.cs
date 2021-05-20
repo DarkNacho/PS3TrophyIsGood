@@ -100,7 +100,7 @@ namespace PS3TrophyIsGood
                 MessageBox.Show(Properties.strings.SyncedTrophyCanNotEdit);
             }
             else
-            if (trophyId != 0 && tconf[trophyId].gid == 0 && IsTrophyGot(0))
+            if (trophyId != 0 && tconf[trophyId].gid == 0 && IsTrophyAchieved(0))
             {
                 MessageBox.Show(Properties.strings.CantLoclPlatinumBeforOther);
             }
@@ -119,7 +119,7 @@ namespace PS3TrophyIsGood
 
         private bool UnlockTrophy(int trophyId, DateTime trophyTime, ListViewItem lvi)
         {
-            if (trophyId == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesGot() < baseGamaCount))
+            if (trophyId == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesAchieved() < baseGamaCount))
             {
                 MessageBox.Show(Properties.strings.CantUnloclPlatinumBeforOther);
                 return false;
@@ -284,17 +284,17 @@ namespace PS3TrophyIsGood
             return (tpsn[trophyID].HasValue && tpsn[trophyID].Value.IsSync) || tusr.trophyTimeInfoTable[trophyID].IsSync;
         }
 
-        private bool IsTrophyGot(int trophyID)
+        private bool IsTrophyAchieved(int trophyID)
         {
             return tpsn[trophyID].HasValue || tusr.trophyTimeInfoTable[trophyID].IsGet;
         }
 
-        private int GetCountBaseTrophiesGot()
+        private int GetCountBaseTrophiesAchieved()
         {
             int countBaseTrophiesGot = 0;
             for (int i = 0; i < tconf.trophys.Count; i++)
             {
-                if (tconf[i].gid == 0 && IsTrophyGot(i))
+                if (tconf[i].gid == 0 && IsTrophyAchieved(i))
                 {
                     countBaseTrophiesGot++;
                 }
@@ -308,7 +308,7 @@ namespace PS3TrophyIsGood
             if (e.SubItem == 6 && !IsTrophySync(trophyID))
             {
                 DateTime trophyTime = DateTime.Now;
-                if (IsTrophyGot(trophyID))
+                if (IsTrophyAchieved(trophyID))
                 {
                     if (tpsn[trophyID].HasValue)
                     {
@@ -386,7 +386,7 @@ namespace PS3TrophyIsGood
             }
             else
             {  // nonget
-                if (trophyID == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesGot() < baseGamaCount))
+                if (trophyID == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesAchieved() < baseGamaCount))
                 {
                     MessageBox.Show(Properties.strings.CantUnloclPlatinumBeforOther);
                 }
@@ -541,14 +541,14 @@ namespace PS3TrophyIsGood
             //Base game
             for (i = 1; i < tusr.trophyTimeInfoTable.Count && tconf[i].gid == 0; i++)
             {
-                if (!IsTrophyGot(i))
+                if (!IsTrophyAchieved(i))
                 {
                     tusr.UnlockTrophy(i, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
                     tpsn.PutTrophy(i, tusr.trophyTypeTable[i].Type, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
                 }
             }
             //Platinium game
-            if (!IsTrophyGot(0))
+            if (!IsTrophyAchieved(0))
             {
                 tusr.UnlockTrophy(0, LastTrophyTime().AddSeconds(1));
                 tpsn.PutTrophy(0, tusr.trophyTypeTable[0].Type, LastTrophyTime().AddSeconds(1));
@@ -557,7 +557,7 @@ namespace PS3TrophyIsGood
             //DLC 
             for (; i < tusr.trophyTimeInfoTable.Count; i++)
             {
-                if (!IsTrophyGot(i))
+                if (!IsTrophyAchieved(i))
                 {
                     tusr.UnlockTrophy(i, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
                     tpsn.PutTrophy(i, tusr.trophyTypeTable[i].Type, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
