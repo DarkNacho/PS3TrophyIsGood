@@ -489,6 +489,16 @@ namespace PS3TrophyIsGood
             {
                 if (listViewEx1.IsEditing)
                     listViewEx1.EndEditing(true);
+
+                var profile = toolStripComboBox2.Text;
+                if (profile != "Default Profile")
+                {
+                    byte[] account_id = Utility.GetAccountIdFromProfile(profile);
+                    Utility.WriteAccountIdToParamSFO(pathTemp, account_id);
+                    tpsn.account_id = account_id;
+                    tusr.account_id = account_id;
+                }
+
                 tpsn.Save();
                 tusr.Save();
                 haveBeenEdited = false;
@@ -496,7 +506,7 @@ namespace PS3TrophyIsGood
                 try
                 {
                     Utility.CopyTrophyData(pathTemp, encPathTemp, false);
-                    Utility.encryptTrophy(encPathTemp, toolStripComboBox2.Text);
+                    Utility.encryptTrophy(encPathTemp);
                     Utility.CopyTrophyData(encPathTemp, path, true);
                 }
                 finally

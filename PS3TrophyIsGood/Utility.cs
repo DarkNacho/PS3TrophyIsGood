@@ -66,25 +66,29 @@ public static class Utility
         }
     }
 
-    public static void encryptTrophy(string saveDir, string profile)
+    public static byte[] GetAccountIdFromProfile(string profile)
     {
-        //resing with other param.sfo
-        if (profile != "Default Profile")
+        byte[] profileId;
+        using (var br = new BinaryReader(new FileStream("profiles\\" + profile, FileMode.Open)))
         {
-            profile = "profiles\\" + profile;
-            byte[] profileId;
-            using (var br = new BinaryReader(new FileStream(profile, FileMode.Open)))
-            {
-                br.BaseStream.Position = 0xC;
-                br.BaseStream.Position = br.ReadInt32();
-                profileId = br.ReadBytes(0x10);
-            }
-            using (var bw = new BinaryWriter(new FileStream(saveDir + "\\PARAM.SFO", FileMode.Open)))
-            {
-                bw.BaseStream.Position = 0x274;
-                bw.Write(profileId);
-            }
+            br.BaseStream.Position = 0xC;
+            br.BaseStream.Position = br.ReadInt32();
+            profileId = br.ReadBytes(0x10);
         }
+        return profileId;
+    }
+
+    public static void WriteAccountIdToParamSFO(string saveDir, byte[] account_id)
+    {
+        using (var bw = new BinaryWriter(new FileStream(saveDir + "\\PARAM.SFO", FileMode.Open)))
+        {
+            bw.BaseStream.Position = 0x274;
+            bw.Write(account_id);
+        }
+    }
+
+    public static void encryptTrophy(string saveDir)
+    {
         // update PFD
         System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo(PFD_TOOL_APP, " -u \"" + saveDir + "\"");
         procStartInfo.WorkingDirectory = PFD_TOOL_DIRECTORY;
