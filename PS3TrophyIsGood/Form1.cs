@@ -654,9 +654,6 @@ namespace PS3TrophyIsGood
                         }
                     }
 
-                    if (copyFrom.checkBox1.Checked && tconf.HasPlatinium && (GetCountBaseTrophiesAchieved() >= baseGamaCount) && !IsTrophySync(0))
-                        ChangeTrophyTime(0, GetDateTimeLastBaseTrophyAchieved().AddSeconds(1));
-
                     haveBeenEdited = true;
                     RefreshComponents();
                 }
