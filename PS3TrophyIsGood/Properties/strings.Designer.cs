@@ -106,6 +106,24 @@ namespace PS3TrophyIsGood.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Some trophies will have date/time greater than the current. Are you sure?.
+        /// </summary>
+        internal static string CopyHasDateGreaterThanCurrent {
+            get {
+                return ResourceManager.GetString("CopyHasDateGreaterThanCurrent", resourceCulture);
+            }
+        }
+		
+		/// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Some trophies will have date/time lower than the last synchronized trophy. Continue?.
+        /// </summary>
+        internal static string CopyHasDateLowerThanLastSync {
+            get {
+                return ResourceManager.GetString("CopyHasDateLowerThanLastSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Danger 的當地語系化字串。
         /// </summary>
         internal static string Danger {
@@ -210,6 +228,15 @@ namespace PS3TrophyIsGood.Properties {
         internal static string RestartProgram {
             get {
                 return ResourceManager.GetString("RestartProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Selected date/time is greater than the current. Are you sure?.
+        /// </summary>
+        internal static string SelectedDateGreaterThanCurrent {
+            get {
+                return ResourceManager.GetString("SelectedDateGreaterThanCurrent", resourceCulture);
             }
         }
         

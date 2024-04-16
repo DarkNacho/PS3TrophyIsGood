@@ -44,6 +44,8 @@
             this.yearsNumeric = new System.Windows.Forms.NumericUpDown();
             this.monthNumeric = new System.Windows.Forms.NumericUpDown();
             this.daysNumeric = new System.Windows.Forms.NumericUpDown();
+            this.lblHours = new System.Windows.Forms.Label();
+            this.hoursNumeric = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxMinutes)).BeginInit();
@@ -51,6 +53,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.yearsNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.monthNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.daysNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hoursNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -69,6 +72,7 @@
             // 
             resources.ApplyResources(this.button2, "button2");
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            resources.ApplyResources(this.button2, "button2");
             this.button2.Name = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
@@ -92,6 +96,7 @@
             this.groupBox1.Controls.Add(this.yearsNumeric);
             this.groupBox1.Controls.Add(this.monthNumeric);
             this.groupBox1.Controls.Add(this.daysNumeric);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
@@ -143,6 +148,11 @@
             // yearsNumeric
             // 
             resources.ApplyResources(this.yearsNumeric, "yearsNumeric");
+            this.yearsNumeric.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.yearsNumeric.Name = "yearsNumeric";
             // 
             // monthNumeric
@@ -153,6 +163,11 @@
             0,
             0,
             0});
+            this.monthNumeric.Minimum = new decimal(new int[] {
+            11,
+            0,
+            0,
+            -2147483648});
             this.monthNumeric.Name = "monthNumeric";
             // 
             // daysNumeric
@@ -163,7 +178,32 @@
             0,
             0,
             0});
+            this.daysNumeric.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            -2147483648});
             this.daysNumeric.Name = "daysNumeric";
+            // 
+            // lblHours
+            // 
+            resources.ApplyResources(this.lblHours, "lblHours");
+            this.lblHours.Name = "lblHours";
+            // 
+            // hoursNumeric
+            // 
+            resources.ApplyResources(this.hoursNumeric, "hoursNumeric");
+            this.hoursNumeric.Maximum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            0});
+            this.hoursNumeric.Minimum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            -2147483648});
+            this.hoursNumeric.Name = "hoursNumeric";
             // 
             // label6
             // 
@@ -176,7 +216,9 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button2;
+            this.Controls.Add(this.lblHours);
             this.Controls.Add(this.label6);
+            this.Controls.Add(this.hoursNumeric);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button2);
@@ -192,6 +234,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.yearsNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.monthNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.daysNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hoursNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -215,5 +258,7 @@
         private System.Windows.Forms.NumericUpDown monthNumeric;
         private System.Windows.Forms.NumericUpDown daysNumeric;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblHours;
+        private System.Windows.Forms.NumericUpDown hoursNumeric;
     }
 }

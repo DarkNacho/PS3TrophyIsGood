@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace PS3TrophyIsGood
 {
-   
+
     public partial class CopyFrom : Form
     {
         /// <summary>
@@ -25,35 +25,69 @@ namespace PS3TrophyIsGood
             }
         }
 
-        public CopyFrom()
+        private DateTime lastSyncTrophyTime;
+
+        public CopyFrom(DateTime lastSyncTrophyTime)
         {
             InitializeComponent();
+            this.lastSyncTrophyTime = lastSyncTrophyTime;
             groupBox1.Visible = false;
+        }
+
+        private IEnumerable<long> _times;
+        public List<long> Times
+        {
+            get
+            {
+                if (_times == null)
+                    return new List<long>();
+                return _times.ToList();
+            }
         }
 
         /// <summary>
         /// This get the timestamp from a profile(asuming is a legit one) then modify them to looks like they are legit but not a comple copy
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<long> smartCopy()
+        private IEnumerable<long> smartCopy()
         {
             var trophies = copyFrom(textBox1.Text).ToList();
             trophies.Sort((a, b) => a.Date.CompareTo(b.Date));
-            var rand = new Random(); 
-            var time = TimeSpan.FromDays((long)(yearsNumeric.Value * 365+ monthNumeric.Value * 30 + daysNumeric.Value)) + TimeSpan.FromSeconds(rand.Next((int)minMinutes.Value, (int)maxMinutes.Value));
-            var delta = Convert.ToInt64(time.TotalSeconds);
-            for (int i = 0; i< trophies.Count-1; ++i)
+            var rand = new Random();
+            DateTime dtTrophy = new DateTime();
+            for (int i = 0; i < trophies.Count; i++)
             {
                 if (trophies[i].Date == 0) continue;
-                trophies[i].Date += delta;
-                if (trophies[i +1].Date - trophies[i].Date > 60) delta += rand.Next((int)minMinutes.Value, (int)maxMinutes.Value);
+                DateTime dtAux = trophies[i].Date.TimeStampToDateTime();
+                dtAux = dtAux.AddYears((int)yearsNumeric.Value).AddMonths((int)monthNumeric.Value).AddHours((int)hoursNumeric.Value).AddDays((double)daysNumeric.Value);
+                do
+                {
+                    DateTime dtAux2 = dtAux.AddSeconds(rand.Next((int)minMinutes.Value * 60, (int)maxMinutes.Value * 60));
+                    if (DateTime.Compare(dtAux2, dtTrophy) >= 0)
+                        dtAux = dtAux2;
+                } while (DateTime.Compare(dtTrophy, dtAux) > 0);
+                dtTrophy = dtAux;
+                trophies[i].Date = dtTrophy.DateTimeToTimeStamp();
             }
-            trophies[trophies.Count -1].Date += delta;
+
             trophies.Sort((a, b) => a.Id.CompareTo(b.Id));
-            return trophies.Select(d=>d.Date);
+            return trophies.Select(d => d.Date);
         }
 
-        public IEnumerable<long> copyFrom() => copyFrom(textBox1.Text).Select(p => p.Date);
+        private IEnumerable<long> copyFrom()
+        {
+            var trophies = copyFrom(textBox1.Text).ToList();
+            if (hoursNumeric.Value != 0)
+            {
+                for (int i = 0; i < trophies.Count; i++)
+                {
+                    if (trophies[i].Date == 0) continue;
+                    DateTime dtAux = trophies[i].Date.TimeStampToDateTime().AddHours((int)hoursNumeric.Value);
+                    trophies[i].Date = dtAux.DateTimeToTimeStamp();
+                }
+            }
+            return trophies.Select(d => d.Date);
+        }
 
         /// <summary>
         /// Just parse and get the timestamps from a profile from https://psntrophyleaders.com
@@ -69,7 +103,7 @@ namespace PS3TrophyIsGood
                 client.Headers.Add("User-Agent: Other");
                 var x = regex.Matches(client.DownloadString(url));
                 foreach (Match match in x)
-                    yield return new Pair(i++,long.Parse(Regex.Match(match.Value, "\\d+").ToString()));
+                    yield return new Pair(i++, long.Parse(Regex.Match(match.Value, "\\d+").ToString()));
             }
         }
 
@@ -92,8 +126,31 @@ namespace PS3TrophyIsGood
         {
             if (minMinutes.Value > maxMinutes.Value)
                 MessageBox.Show(Properties.strings.MinCantBeGreaterThanMax);
-            else if (Regex.IsMatch(textBox1.Text,"https://psntrophyleaders.com/user/view/" + "\\S+/\\S+"))
-                DialogResult = DialogResult.OK;
+            else if (Regex.IsMatch(textBox1.Text, "https://psntrophyleaders.com/user/view/" + "\\S+/\\S+"))
+            {
+                _times = checkBox1.Checked ? smartCopy() : copyFrom();
+                var hasDateGreaterThanCurrent = _times.Any(t => DateTime.Compare(t.TimeStampToDateTime(), DateTime.Now) > 0);
+                var hasDateLowerThanLastSync = _times.Any(t => t > 0 && DateTime.Compare(lastSyncTrophyTime, t.TimeStampToDateTime()) > 0);
+
+                if (hasDateGreaterThanCurrent && hasDateLowerThanLastSync)
+                {
+                    if ((MessageBox.Show(Properties.strings.CopyHasDateLowerThanLastSync, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        && (MessageBox.Show(Properties.strings.CopyHasDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes))
+                        DialogResult = DialogResult.OK;
+                }
+                else if (hasDateGreaterThanCurrent)
+                {
+                    if (MessageBox.Show(Properties.strings.CopyHasDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        DialogResult = DialogResult.OK;
+                }
+                else if (hasDateLowerThanLastSync)
+                {
+                    if (MessageBox.Show(Properties.strings.CopyHasDateLowerThanLastSync, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        DialogResult = DialogResult.OK;
+                }
+                else
+                    DialogResult = DialogResult.OK;
+            }
             else MessageBox.Show(Properties.strings.CantFindGame);
         }
     }

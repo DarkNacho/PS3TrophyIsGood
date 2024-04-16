@@ -163,7 +163,7 @@
     <value>Não foi possível encontrar o jogo.</value>
   </data>
   <data name="MinCantBeGreaterThanMax" xml:space="preserve">
-    <value>"Minimum minutes" can't be greater than "Maximum minutes".</value>
+    <value>"Minutos (mínimo)" não pode ser maior que "Minutos (máximo)".</value>
   </data>
   <data name="PsnSyncTime" xml:space="preserve">
     <value>O último troféu sincronizado com a PSN tem a seguinte data: {0}. Selecione uma data maior que essa.</value>
@@ -173,5 +173,14 @@
   </data>
   <data name="FileNotFoundMsg" xml:space="preserve">
     <value>O arquivo "{0}" não foi encontrado. Selecione uma pasta de troféus válida.</value>
+  </data>
+  <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
+    <value>A data/hora selecionada é maior que a data/hora atual. Deseja continuar?</value>
+  </data>
+  <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
+    <value>Alguns troféus ficarão com a data/hora maior que a atual. Deseja continuar?</value>
+  </data>
+  <data name="CopyHasDateLowerThanLastSync" xml:space="preserve">
+    <value>Alguns troféus ficarão com a data/hora menor que a data/hora do último troféu sincronizado. Deseja continuar?</value>
   </data>
 </root>

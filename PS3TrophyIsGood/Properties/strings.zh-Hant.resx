@@ -163,15 +163,24 @@
     <value>與PSN同步的最後一個獎杯的日期如下：{0}。 選擇一個大於此日期的日期。</value>
   </data>
   <data name="RandomEndTime" xml:space="preserve">
-    <value>隨機結束時間</value>
+    <value>RandomEndTime</value>
   </data>
   <data name="RandomStartTime" xml:space="preserve">
-    <value>隨機開始時間</value>
+    <value>RandomStartTime</value>
   </data>
   <data name="DateFormatString" xml:space="preserve">
     <value>yyyy/M/dd  HH:mm:ss</value>
   </data>
   <data name="FileNotFoundMsg" xml:space="preserve">
     <value>找不到“ {0}”。 請選擇一個有效的獎杯文件夾。</value>
+  </data>
+  <data name="SelectedDateGreaterThanCurrent" xml:space="preserve">
+    <value>所選日期/時間長於當前日期/時間。 你想繼續嗎？</value>
+  </data>
+  <data name="CopyHasDateGreaterThanCurrent" xml:space="preserve">
+    <value>某些獎杯的日期/時間將大於當前日期/時間。 你確定嗎？</value>
+  </data>
+  <data name="CopyHasDateLowerThanLastSync" xml:space="preserve">
+    <value>某些獎杯的日期/時間會比上次同步獎杯的日期/時間低。 繼續？</value>
   </data>
 </root>

@@ -61,7 +61,6 @@ namespace PS3TrophyIsGood
             toolStripComboBox2.Items.AddRange(profiles);
             toolStripComboBox2.SelectedIndex = 0;
             dateTimePicker1.CustomFormat = Properties.strings.DateFormatString;
-            copyFrom = new CopyFrom();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -91,7 +90,7 @@ namespace PS3TrophyIsGood
                 MessageBox.Show(string.Format(Properties.strings.PsnSyncTime, lastSyncTrophyTime.ToString(Properties.strings.DateFormatString)));
                 return false;
             }
-            return true;
+            return ((DateTime.Compare(selectedDate, DateTime.Now) <= 0) || (MessageBox.Show(Properties.strings.SelectedDateGreaterThanCurrent, Properties.strings.Danger, MessageBoxButtons.YesNo) == DialogResult.Yes));
         }
 
         private void DeleteTrophy(int trophyId, ListViewItem lvi)
@@ -101,7 +100,7 @@ namespace PS3TrophyIsGood
                 MessageBox.Show(Properties.strings.SyncedTrophyCanNotEdit);
             }
             else
-            if (trophyId != 0 && tconf[trophyId].gid == 0 && IsTrophyGot(0))
+            if (trophyId != 0 && tconf[trophyId].gid == 0 && IsTrophyAchieved(0))
             {
                 MessageBox.Show(Properties.strings.CantLoclPlatinumBeforOther);
             }
@@ -120,9 +119,39 @@ namespace PS3TrophyIsGood
 
         private bool UnlockTrophy(int trophyId, DateTime trophyTime, ListViewItem lvi)
         {
-            if (trophyId == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesGot() < baseGamaCount))
+            if (trophyId == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesAchieved() < baseGamaCount))
             {
                 MessageBox.Show(Properties.strings.CantUnloclPlatinumBeforOther);
+                return false;
+            }
+
+            if (ValidateSelectedDate(trophyTime))
+            {
+                try
+                {
+                    tpsn.PutTrophy(trophyId, tusr.trophyTypeTable[trophyId].Type, trophyTime);
+                    tusr.UnlockTrophy(trophyId, trophyTime);
+                    lvi.SubItems[4].Text = Properties.strings.yes;
+                    lvi.BackColor = Color.White;
+                    lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
+                    CompletionRates();
+                    haveBeenEdited = true;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        private bool ChangeTrophyTime(int trophyId, DateTime trophyTime)
+        {
+            if (IsTrophySync(trophyId))
+            {
+                MessageBox.Show(Properties.strings.SyncedTrophyCanNotEdit);
                 return false;
             }
             else
@@ -131,12 +160,10 @@ namespace PS3TrophyIsGood
                 {
                     try
                     {
-                        tpsn.PutTrophy(trophyId, tusr.trophyTypeTable[trophyId].Type, trophyTime);
-                        tusr.UnlockTrophy(trophyId, trophyTime);
-                        lvi.SubItems[4].Text = Properties.strings.yes;
-                        lvi.BackColor = Color.White;
-                        lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
-                        CompletionRates();
+                        tpsn.ChangeTime(trophyId, trophyTime);
+                        TROPUSR.TrophyTimeInfo tti = tusr.trophyTimeInfoTable[trophyId];
+                        tti.Time = trophyTime;
+                        tusr.trophyTimeInfoTable[trophyId] = tti;
                         haveBeenEdited = true;
                         return true;
                     }
@@ -155,36 +182,10 @@ namespace PS3TrophyIsGood
 
         private bool ChangeTrophyTime(int trophyId, DateTime trophyTime, ListViewItem lvi)
         {
-            if (IsTrophySync(trophyId))
-            {
-                MessageBox.Show(Properties.strings.SyncedTrophyCanNotEdit);
-                return false;
-            }
-            else
-            {
-                if (ValidateSelectedDate(trophyTime))
-                {
-                    try
-                    {
-                        tpsn.ChangeTime(trophyId, trophyTime);
-                        TROPUSR.TrophyTimeInfo tti = tusr.trophyTimeInfoTable[trophyId];
-                        tti.Time = trophyTime;
-                        tusr.trophyTimeInfoTable[trophyId] = tti;
-                        lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
-                        haveBeenEdited = true;
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            var ret = ChangeTrophyTime(trophyId, trophyTime);
+            if (ret)
+                lvi.SubItems[6].Text = trophyTime.ToString(Properties.strings.DateFormatString);
+            return ret;
         }
 
         private void RefreshComponents()
@@ -211,7 +212,7 @@ namespace PS3TrophyIsGood
                 {
                     lvi.SubItems.Add(tusr.trophyTimeInfoTable[i].IsGet ? Properties.strings.yes : Properties.strings.no);
                     lvi.SubItems.Add(tusr.trophyTimeInfoTable[i].IsSync ? Properties.strings.yes : Properties.strings.no);
-                    
+
                     var tropTimeTxt = string.Empty;
                     if (tusr.trophyTimeInfoTable[i].Time.Ticks > 0)
                     {
@@ -290,17 +291,38 @@ namespace PS3TrophyIsGood
             return (tpsn[trophyID].HasValue && tpsn[trophyID].Value.IsSync) || tusr.trophyTimeInfoTable[trophyID].IsSync;
         }
 
-        private bool IsTrophyGot(int trophyID)
+        private bool IsTrophyAchieved(int trophyID)
         {
             return tpsn[trophyID].HasValue || tusr.trophyTimeInfoTable[trophyID].IsGet;
         }
 
-        private int GetCountBaseTrophiesGot()
+        private DateTime GetTrophyTime(int trophyID)
+        {
+            if (tpsn[trophyID].HasValue)
+                return tpsn[trophyID].Value.Time;
+            return tusr.trophyTimeInfoTable[trophyID].Time;
+        }
+
+        private DateTime GetDateTimeLastBaseTrophyAchieved()
+        {
+            DateTime date = ps3Time;
+            for (int i = 1; i < tconf.trophys.Count; i++)
+            {
+                if (tconf[i].gid == 0 && IsTrophyAchieved(i))
+                {
+                    var trophyTime = GetTrophyTime(i);
+                    date = (DateTime.Compare(trophyTime, date) > 0 ? trophyTime : date);
+                }
+            }
+            return date;
+        }
+
+        private int GetCountBaseTrophiesAchieved()
         {
             int countBaseTrophiesGot = 0;
             for (int i = 0; i < tconf.trophys.Count; i++)
             {
-                if (tconf[i].gid == 0 && IsTrophyGot(i))
+                if (tconf[i].gid == 0 && IsTrophyAchieved(i))
                 {
                     countBaseTrophiesGot++;
                 }
@@ -314,7 +336,7 @@ namespace PS3TrophyIsGood
             if (e.SubItem == 6 && !IsTrophySync(trophyID))
             {
                 DateTime trophyTime = DateTime.Now;
-                if (IsTrophyGot(trophyID))
+                if (IsTrophyAchieved(trophyID))
                 {
                     if (tpsn[trophyID].HasValue)
                     {
@@ -392,7 +414,7 @@ namespace PS3TrophyIsGood
             }
             else
             {  // nonget
-                if (trophyID == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesGot() < baseGamaCount))
+                if (trophyID == 0 && tconf.HasPlatinium && (GetCountBaseTrophiesAchieved() < baseGamaCount))
                 {
                     MessageBox.Show(Properties.strings.CantUnloclPlatinumBeforOther);
                 }
@@ -444,6 +466,7 @@ namespace PS3TrophyIsGood
                 ps3Time = lastSyncTrophyTime;
                 dtpForm = new DateTimePickForm(ps3Time);
                 dtpfForInstant = new DateTimePickForm(ps3Time);
+                copyFrom = new CopyFrom(ps3Time);
 
                 RefreshComponents();
                 isOpen = true;
@@ -475,6 +498,16 @@ namespace PS3TrophyIsGood
             {
                 if (listViewEx1.IsEditing)
                     listViewEx1.EndEditing(true);
+
+                var profile = toolStripComboBox2.Text;
+                if (profile != "Default Profile")
+                {
+                    byte[] account_id = Utility.GetAccountIdFromProfile(profile);
+                    Utility.WriteAccountIdToParamSFO(pathTemp, account_id);
+                    tpsn.account_id = account_id;
+                    tusr.account_id = account_id;
+                }
+
                 tpsn.Save();
                 tusr.Save();
                 haveBeenEdited = false;
@@ -482,7 +515,7 @@ namespace PS3TrophyIsGood
                 try
                 {
                     Utility.CopyTrophyData(pathTemp, encPathTemp, false);
-                    Utility.encryptTrophy(encPathTemp, toolStripComboBox2.Text);
+                    Utility.encryptTrophy(encPathTemp);
                     Utility.CopyTrophyData(encPathTemp, path, true);
                 }
                 finally
@@ -546,23 +579,24 @@ namespace PS3TrophyIsGood
             //Base game
             for (i = 1; i < tusr.trophyTimeInfoTable.Count && tconf[i].gid == 0; i++)
             {
-                if (!IsTrophyGot(i))
+                if (!IsTrophyAchieved(i))
                 {
                     tusr.UnlockTrophy(i, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
                     tpsn.PutTrophy(i, tusr.trophyTypeTable[i].Type, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
                 }
             }
             //Platinium game
-            if (!IsTrophyGot(0))
+            if (!IsTrophyAchieved(0))
             {
-                tusr.UnlockTrophy(0, LastTrophyTime().AddSeconds(1));
-                tpsn.PutTrophy(0, tusr.trophyTypeTable[0].Type, LastTrophyTime().AddSeconds(1));
+                DateTime aux = GetDateTimeLastBaseTrophyAchieved();
+                tusr.UnlockTrophy(0, aux.AddSeconds(1));
+                tpsn.PutTrophy(0, tusr.trophyTypeTable[0].Type, aux.AddSeconds(1));
             }
 
             //DLC 
             for (; i < tusr.trophyTimeInfoTable.Count; i++)
             {
-                if (!IsTrophyGot(i))
+                if (!IsTrophyAchieved(i))
                 {
                     tusr.UnlockTrophy(i, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
                     tpsn.PutTrophy(i, tusr.trophyTypeTable[i].Type, new DateTime(Utility.LongRandom(ps3Time.Ticks, randomEndTime.Ticks, rand)));
@@ -574,11 +608,13 @@ namespace PS3TrophyIsGood
 
         private void 清除獎杯ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TROPTRNS.TrophyInfo? ti = tpsn.PopTrophy();
-            while (ti.HasValue)
+            for (int i = 0; i < tconf.Count; i++)
             {
-                tusr.LockTrophy(ti.Value.TrophyID);
-                ti = tpsn.PopTrophy();
+                if (!IsTrophySync(i))
+                {
+                    tpsn.DeleteTrophyByID(i);
+                    tusr.LockTrophy(i);
+                }
             }
             haveBeenEdited = true;
             RefreshComponents();
@@ -613,20 +649,20 @@ namespace PS3TrophyIsGood
         {
             if (copyFrom.ShowDialog(this) == DialogResult.OK)
             {
-                var _times = copyFrom.checkBox1.Checked ? copyFrom.smartCopy().ToList() : copyFrom.copyFrom().ToList();
+                var _times = copyFrom.Times;
                 if (_times.Any()) 清除獎杯ToolStripMenuItem_Click(sender, e); // no idea why but sometimes it get bug and it don't update, so lockin first fix it
                 try
                 {
-                    for (int i = 0; i < tusr.trophyTimeInfoTable.Count; ++i)
+                    for (int i = 0; i < tconf.Count; i++)
                     {
-
-                        if (!tpsn[i].HasValue && _times[i] != 0)
+                        if (!IsTrophySync(i) && _times[i] != 0)
                         {
                             var time = _times[i].TimeStampToDateTime();
                             tusr.UnlockTrophy(i, time);
                             tpsn.PutTrophy(i, tusr.trophyTypeTable[i].Type, time);
                         }
                     }
+
                     haveBeenEdited = true;
                     RefreshComponents();
                 }

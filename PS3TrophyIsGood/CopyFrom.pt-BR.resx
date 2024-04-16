@@ -117,18 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>398, 20</value>
+  </data>
   <data name="button1.Text" xml:space="preserve">
     <value>Aceitar</value>
+  </data>
+  <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>336, 54</value>
   </data>
   <data name="button2.Text" xml:space="preserve">
     <value>Cancelar</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="checkBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>230, 58</value>
+  </data>
   <data name="checkBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 17</value>
+    <value>104, 17</value>
   </data>
   <data name="checkBox1.Text" xml:space="preserve">
-    <value>Aplicar cópia inteligente</value>
+    <value>Cópia inteligente</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>397, 144</value>
   </data>
   <data name="groupBox1.Text" xml:space="preserve">
     <value>Opções</value>
@@ -141,6 +153,9 @@
   </data>
   <data name="label4.Text" xml:space="preserve">
     <value>Minutos (mínimo):</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>147, 19</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>31, 13</value>
@@ -160,11 +175,26 @@
   <data name="label1.Text" xml:space="preserve">
     <value>Dias</value>
   </data>
+  <data name="lblHours.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 13</value>
+  </data>
+  <data name="lblHours.Text" xml:space="preserve">
+    <value>Corrigir horas:</value>
+  </data>
+  <data name="lblHours.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
+  </data>
+  <data name="hoursNumeric.Location" type="System.Drawing.Point, System.Drawing">
+    <value>172, 56</value>
+  </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
     <value>80, 13</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
     <value>Copiar do perfil:</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>422, 248</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Copiar do perfil</value>
